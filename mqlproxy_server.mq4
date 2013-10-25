@@ -12,6 +12,8 @@
 #include <select.mqh>
 #include <utils.mqh>
 
+extern int mqlproxyserver_port = 10000
+
 int sock_server;
 int ctrl_flags[10];
 
@@ -20,11 +22,11 @@ int ctrl_flags[10];
 //+------------------------------------------------------------------+
 int init() {
 
-      sock_server = socket_server( 10000 );
-      ctrl_flags[0] = 1;
-	   run_select_loop( sock_server, ctrl_flags );	
+	sock_server = socket_server( mqlproxyserver_port );
+	ctrl_flags[0] = 1;
+	run_select_loop( sock_server, ctrl_flags );	
       
-      return(0);
+	return(0);
 }
 
 
@@ -33,8 +35,8 @@ void select_ondata_callback( int sock, string msg ) {
 
 	Print("Sock : ", sock , " Msg : " , msg );
    
-   string buffer[];
-   SplitString(msg, " ", buffer);	
+	string buffer[];
+	SplitString(msg, " ", buffer);	
 	
 	if ( buffer[0] == "quit" ) {
 	
